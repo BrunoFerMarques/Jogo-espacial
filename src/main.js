@@ -1,8 +1,6 @@
-import * as THREE from "../node_modules/three/build/three.module.js";
-import { OrbitControls } from '../node_modules/three/examples/jsm/controls/OrbitControls.js';
-import { loadAirplane, updateAirplane, updateCamera } from './Aircraft.js';
-import { loadPlanets, rotatePlanets} from './Planets.js';
-
+import * as THREE from 'three';
+import { loadAirplane, updateAirplane, updateCamera } from './Aircraft.js';  // '@' é o alias para o diretório src
+import { loadPlanets, rotatePlanets } from './Planets.js';  // '@' aponta para 'src'
 
 //configurando o tamanho da ja nela de recorte
 window.innerWidth = 1000
@@ -30,8 +28,8 @@ loaderScene.load('./textures/galaxy/8k_stars_milky_way.jpg', (texture) => {
 });
 export default scene; 
 
-const orbitControls = new OrbitControls(camera, renderer.domElement);
-let isOrbitControls = false
+
+let isFirstPerson = false
 const iluminationGlobal = new THREE.AmbientLight(0xfffaf0, 1);
 scene.add(iluminationGlobal);
 
@@ -45,11 +43,7 @@ window.addEventListener('resize', () => {
 
 loadAirplane(scene); 
 loadPlanets(scene)
-window.addEventListener('keydown', (e) => {
-  if(e.key == 'c'){
-    isOrbitControls = !isOrbitControls
-  }
-});
+
 function animate() {
   requestAnimationFrame(animate);
   rotatePlanets()
