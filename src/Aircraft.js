@@ -1,8 +1,5 @@
-import * as THREE from '../node_modules/three/build/three.module.js';
-
-import { GLTFLoader } from '../node_modules/three/examples/jsm/Addons.js'
-
-
+import * as THREE from 'three'
+import { GLTFLoader } from 'three/addons/Addons.js'
 export const planePosition = new THREE.Vector3(5000, 0, 20);
 const x = new THREE.Vector3(1, 0, 0);
 const y = new THREE.Vector3(0, 1, 0);
@@ -15,7 +12,6 @@ let speed = 0.02;
 const maxVelocity = 0.04;
 let airplane = null;
 
-// Controle de teclado
 export const controls = {};
 
 window.addEventListener('keydown', (e) => {
