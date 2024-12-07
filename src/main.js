@@ -1,6 +1,6 @@
-import * as THREE from 'three';
-import { loadAirplane, updateAirplane, updateCamera } from './Aircraft.js';  // '@' é o alias para o diretório src
-import { loadPlanets, rotatePlanets } from './Planets.js';  // '@' aponta para 'src'
+import * as THREE from '../node_modules/three/build/three.module.js';
+import { loadAirplane, updateAirplane, updateCamera } from './Aircraft.js';  
+import { loadPlanets, rotatePlanets } from './Planets.js'; 
 
 //configurando o tamanho da ja nela de recorte
 window.innerWidth = 1000

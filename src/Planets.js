@@ -1,4 +1,5 @@
-import * as THREE from 'three';
+import * as THREE from '../node_modules/three/build/three.module.js';
+
 console.log("Three carrregado com sucesso", THREE)
 let planets = [];
 let scalePosition = 10

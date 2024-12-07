@@ -1,5 +1,6 @@
-import * as THREE from 'three';
-import { GLTFLoader } from 'three/addons/Addons.js'
+import * as THREE from '../node_modules/three/build/three.module.js';
+
+import { GLTFLoader } from '../node_modules/three/examples/jsm/Addons.js'
 
 
 export const planePosition = new THREE.Vector3(5000, 0, 20);
