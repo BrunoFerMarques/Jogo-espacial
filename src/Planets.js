@@ -1,42 +1,20 @@
 import * as THREE from 'three'
 
-console.log("Three carrregado com sucesso", THREE)
-let planets = [];
-let scalePosition = 10
+let planets = new Array
 let scaleSize = 100
-let positionSun = 20 * scaleSize
-export function loadPlanets(scene) {
-  const textureLoaderEarth = new THREE.TextureLoader();
-  textureLoaderEarth.load(
-    './textures/planets/earth/2k_earth_daymap.jpg',  
-    (texture) => {  
-      
-      const geometryEarth = new THREE.SphereGeometry(1.2756*scaleSize, 32, 32);//tamanho  
-      const materialEarth = new THREE.MeshStandardMaterial({ map: texture });  
-      const earth = new THREE.Mesh(geometryEarth, materialEarth);  
-      earth.castShadow = true
-      earth.receiveShadow = true
-      planets.push(earth);
-      scene.add(earth);
-      earth.position.set(150*scalePosition + positionSun, 0, 500);  //posição
-      console.log("Terra carregada com sucesso!", earth);
-      
-      const cloudTexture = new THREE.TextureLoader().load('./textures/planets/earth/2k_earth_clouds.jpg')
-      const cloudGeometry = new THREE.SphereGeometry(1.2756*scaleSize + 1, 32, 32); // Raio ligeiramente maior que o da Terra  
-      const cloudMaterial = new THREE.MeshStandardMaterial({
-        map: cloudTexture,
-        transparent: true,   
-        opacity: 0.5,        
-        side: THREE.DoubleSide  
-        
-      });
-      const clouds = new THREE.Mesh(cloudGeometry, cloudMaterial);
-      clouds.position.set(150*scalePosition + positionSun,0,500)
-      console.log("Nuvens da terra carregada com sucesso!", clouds);  
-      scene.add(clouds)
-      planets.push(clouds)
-    }
-  )
+let scalePosition = 10
+let scaleSun = 20 * scaleSize
+let earthPosition = 160*scalePosition + scaleSun
+let positionSun = 0
+let mercuryPosition = 50*scalePosition + scaleSun
+let venusPosition = 100*scalePosition + scaleSun
+let marsPosition = 227.9*scalePosition + scaleSun
+let jupiterPosition = 640.3*scalePosition + scaleSun
+let saturnPosition =  1430*scalePosition + scaleSun
+export function loadPlanets(scene){
+
+  
+  //carregando sol e anel de saturno, pois sao diferentes
   const textureLoaderSun = new THREE.TextureLoader()
   textureLoaderSun.load(
     './textures/planets/sun/8k_sun.jpg',
@@ -51,11 +29,9 @@ export function loadPlanets(scene) {
         metalness: 0.5,
        });  
       const sun = new THREE.Mesh(geometrySun, materialSun);  
-      sun.position.set(0* scalePosition,0,0)
+      sun.position.set(0,0,0)
       planets.push(sun);
       scene.add(sun);
-
-
       //configurando a ilmunação do sol
       const sunLight1 = new THREE.PointLight(0xffc222, 650, 1000000000000,0.6); 
       sunLight1.position.set(0, 0, 0);
@@ -67,125 +43,129 @@ export function loadPlanets(scene) {
     }
   )
 
-  const textureLoaderMercury = new THREE.TextureLoader()
-  textureLoaderMercury.load(
-    './textures/planets/mercury/2k_mercury.jpg',
-    (texture) => {
-      console.log("Textura de mercurio carregada com sucesso!")
-      const geometryMercury = new THREE.SphereGeometry(0.4880*scaleSize, 100, 100);  
-      const materialMercury = new THREE.MeshStandardMaterial({ map: texture });  
-      const mercury = new THREE.Mesh(geometryMercury, materialMercury);  
-      mercury.position.set(60*scalePosition + positionSun,0,0)
+  const saturnRingLoader = new THREE.TextureLoader().load('./textures/planets/saturn/8k_saturn_ring_alpha.png')
+  const saturnRingGeometry = new THREE.RingGeometry(12*scaleSize + 200, 32, 32);
+  const saturnRingMaterial = new THREE.MeshStandardMaterial({
+    map: saturnRingLoader,
+      transparent: true,   
+      opacity: 0.8,        
+      side: THREE.DoubleSide  
       
-      mercury.receiveShadow = true
-      mercury.castShadow = true
-      planets.push(mercury);
-      scene.add(mercury);
-    }
-  )
+  });
+  const saturnRing = new THREE.Mesh(saturnRingGeometry, saturnRingMaterial);
+  saturnRing.name = 'saturnRing'
+  saturnRing.position.set(saturnPosition, 0, 0); // Centralizar no planeta
+  saturnRing.rotation.x = Math.PI / 2; 
+  planets.push(saturnRing)
+  scene.add(saturnRing)
 
-  const textureLoaderVenus = new THREE.TextureLoader()
-  textureLoaderVenus.load(
-    './textures/planets/venus/8k_venus_surface.jpg',
-    (texture) => {
-      console.log("Textura de venus carregada com sucesso!")
-      const geometryVenus = new THREE.SphereGeometry(1.2104*scaleSize, 100, 100);  
-      const materialVenus = new THREE.MeshStandardMaterial({ map: texture });  
-      const venus = new THREE.Mesh(geometryVenus, materialVenus);  
-      venus.position.set(108.2*scalePosition + positionSun,0,200)
-      venus.receiveShadow = true
-      venus.castShadow = true
-      planets.push(venus);
-      scene.add(venus);
-      
-      const venusAtmosphereLoader = new THREE.TextureLoader().load('./textures/planets/venus/4k_venus_atmosphere.jpg')
-      const venusAtmosphereGeometry = new THREE.SphereGeometry(1.21045*scaleSize, 32, 32);
-      const venusAtmosphereMaterial = new THREE.MeshStandardMaterial({
-        map: venusAtmosphereLoader,
-        transparent: true,   
-        opacity: 0.5,        
-        side: THREE.DoubleSide  
-        
-      });
-      const venusAtmosphere = new THREE.Mesh(venusAtmosphereGeometry, venusAtmosphereMaterial);
-      venusAtmosphere.position.set(150*scalePosition + positionSun,0,500)
-      console.log("atmosfera de venus carregada com sucesso!", venus);  
-      scene.add(venusAtmosphere)
-    }
-  )
-
-  const textureLoaderMars = new THREE.TextureLoader()
-  textureLoaderMars.load(
-    './textures/planets/mars/8k_mars.jpg',
-    (texture) => {
-      console.log("Textura de marte carregada com sucesso!")
-      const geometryMars = new THREE.SphereGeometry(0.6794*scaleSize, 100, 100);  
-      const materialMars = new THREE.MeshStandardMaterial({ map: texture });  
-      const mars = new THREE.Mesh(geometryMars, materialMars);  
-      mars.position.set(227.9*scalePosition + positionSun,0,0)
-      
-      mars.receiveShadow = true
-      mars.castShadow = true
-      planets.push(mars);
-      scene.add(mars);
-    }
-  )
-
-  const textureLoaderJupiter = new THREE.TextureLoader()
-  textureLoaderJupiter.load(
-    './textures/planets/jupiter/8k_jupiter.jpg',
-    (texture) => {
-      console.log("Textura de jupiter carregada com sucesso!")
-      const geometryJupiter = new THREE.SphereGeometry(10*scaleSize, 100, 100);  
-      const materialJupiter = new THREE.MeshStandardMaterial({ map: texture });  
-      const jupiter = new THREE.Mesh(geometryJupiter, materialJupiter);  
-      jupiter.position.set(640.3*scalePosition + positionSun,0,0)
-      
-      jupiter.receiveShadow = true
-      jupiter.castShadow = true
-      planets.push(jupiter);
-      scene.add(jupiter);
-    }
-  )
-
-  const textureLoaderSaturn = new THREE.TextureLoader()
-  textureLoaderSaturn.load(
-    './textures/planets/saturn/8k_saturn.jpg',
-    (texture) => {
-      console.log("Textura de saturn carregada com sucesso!")
-      const geometrySaturn = new THREE.SphereGeometry(8*scaleSize, 100, 100);  
-      const materialSaturn = new THREE.MeshStandardMaterial({ map: texture });  
-      const saturn = new THREE.Mesh(geometrySaturn, materialSaturn);  
-      saturn.position.set(1430*scalePosition + positionSun,0,0)
-      
-      saturn.receiveShadow = true
-      saturn.castShadow = true
-      planets.push(saturn);
-      scene.add(saturn);
-   
-      const saturnRingLoader = new THREE.TextureLoader().load('./textures/planets/saturn/8k_saturn_ring_alpha.png')
-      const saturnRingGeometry = new THREE.RingGeometry(12*scaleSize, 32, 32);
-      const saturnRingMaterial = new THREE.MeshStandardMaterial({
-        map: saturnRingLoader,
-        transparent: true,   
-        opacity: 0.8,        
-        side: THREE.DoubleSide  
-        
-      });
-      const saturnRing = new THREE.Mesh(saturnRingGeometry, saturnRingMaterial);
-      saturnRing.position.set(1430 * scalePosition + positionSun, 0, 0); // Centralizar no planeta
-      saturnRing.rotation.x = Math.PI / 2; 
-      console.log("atmosfera de venus carregada com sucesso!", saturnRing);  
-      scene.add(saturnRing)
-    }
-  )
-
+  let earth = createPlanet(scene, 'earth','./textures/planets/earth/2k_earth_daymap.jpg', 1.2756*scaleSize, earthPosition,true, './textures/planets/earth/2k_earth_clouds.jpg', 'clouds')
+  let mercury = createPlanet(scene, 'mercury','./textures/planets/mercury/2k_mercury.jpg', 0.4880*scaleSize, mercuryPosition)
+  let venus = createPlanet(scene, 'venus','./textures/planets/venus/8k_venus_surface.jpg', 1.2104*scaleSize, venusPosition, true, './textures/planets/venus/4k_venus_atmosphere.jpg', 'venusAtmosphere')
+  let mars = createPlanet(scene, 'mars','./textures/planets/mars/8k_mars.jpg', 0.6794*scaleSize, marsPosition)
+  let jupiter = createPlanet(scene, 'jupiter', './textures/planets/jupiter/8k_jupiter.jpg', 10*scaleSize, jupiterPosition)
+  let saturn = createPlanet(scene, 'saturn','./textures/planets/saturn/8k_saturn.jpg', 8*scaleSize, saturnPosition)
+  
 }
+function createPlanet(scene, name ,texturePath, size, position, hasAtmosphere = false, atmosphereTexturePath, nameAthmosphere) {
+  const textureLoader = new THREE.TextureLoader();
+  textureLoader.load(texturePath, (texture) => {
+      const geometry = new THREE.SphereGeometry(size, 32, 32);
+      const material = new THREE.MeshStandardMaterial({ map: texture });
+      const planet = new THREE.Mesh(geometry, material);
+      
+      planet.name = name
+      planet.position.set(position, 0, 0);
+      planet.receiveShadow = true;
+      planet.castShadow = true;
+      planets.push(planet);
+      scene.add(planet);
+
+      if (hasAtmosphere && atmosphereTexturePath) {
+        // Criar a atmosfera
+        const atmosphereGeometry = new THREE.SphereGeometry(size + 2, 32, 32); // Raio ligeiramente maior
+        const atmosphereMaterial = new THREE.MeshStandardMaterial({
+            map: textureLoader.load(atmosphereTexturePath),
+            transparent: true,
+            opacity: 0.5, // Ajustar para um efeito semi-transparente
+            side: THREE.DoubleSide, // Renderizar ambos os lados da esfera
+        });
+        const atmosphere = new THREE.Mesh(atmosphereGeometry, atmosphereMaterial);
+        atmosphere.name = nameAthmosphere
+        atmosphere.position.set(position, 0, 0);
+        scene.add(atmosphere);
+        planets.push(atmosphere); // Adicionar atmosfera à lista de planetas para rotação
+    }
+  });
+}
+
+//rotação no proprio eixo
 export function rotatePlanets() {
   planets.forEach((planet) => {
     planet.rotation.y += 0.001; 
   });
 }
-export function getPlanets() {
-  return planets;
+
+let planetsVelocitys = {
+  earth: 0.0002,
+  mercury: 0.0004,
+  venus: 0.0005,
+  mars: 0.0003,
+  jupiter: 0.0001,
+  saturn: 0.0001 
 }
+
+let theta = {
+  earth : 0,
+  clouds: 0,
+  mercury: 0,
+  venus: 0,
+  venusAtmosphere:0,
+  mars: 0,
+  jupiter: 0,
+  saturn: 0,  
+  saturnRing: 0,
+}
+
+export function translatePlanets(){
+  planets.forEach((planet) =>{
+    if (planet.name == 'earth') {
+      planet.position.set( earthPosition * Math.cos(theta.earth),0, earthPosition * Math.sin(theta.earth))
+      theta.earth += planetsVelocitys.earth
+    }
+    if(planet.name == 'clouds'){
+      planet.position.set( earthPosition * Math.cos(theta.earth),0, earthPosition * Math.sin(theta.earth))
+      theta.clouds += planetsVelocitys.earth
+    }
+    if (planet.name == 'mercury') {
+      planet.position.set( mercuryPosition * Math.cos(theta.mercury),0, mercuryPosition * Math.sin(theta.mercury))
+      theta.mercury += planetsVelocitys.mercury
+    }
+    if (planet.name == 'venus') {
+      planet.position.set( venusPosition * Math.cos(theta.venus),0, earthPosition * Math.sin(theta.venus))
+      theta.venus += planetsVelocitys.venus
+    }
+    if (planet.name == 'venusAtmosphere') {
+      planet.position.set( venusPosition * Math.cos(theta.venus),0, earthPosition * Math.sin(theta.venus))
+      theta.venusAtmosphere += planetsVelocitys.venus
+    }
+    if (planet.name == 'mars') {
+      planet.position.set( marsPosition * Math.cos(theta.mars),0, marsPosition * Math.sin(theta.mars))
+      theta.mars += planetsVelocitys.mars
+    }
+    if (planet.name == 'jupiter') {
+      planet.position.set( jupiterPosition * Math.cos(theta.jupiter),0, jupiterPosition * Math.sin(theta.jupiter))
+      theta.jupiter += planetsVelocitys.jupiter
+    }
+    if (planet.name == 'saturn') {
+      planet.position.set( saturnPosition * Math.cos(theta.saturn),0, saturnPosition * Math.sin(theta.saturn))
+      theta.saturn += planetsVelocitys.saturn
+    }
+    if (planet.name == 'saturnRing') {
+      planet.position.set( saturnPosition * Math.cos(theta.saturn),0, saturnPosition * Math.sin(theta.saturn))
+      theta.saturnRing += planetsVelocitys.saturn
+    }
+  })
+}
+
+
